@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #f33;
+    --secondary: #333;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary) var(--primary);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--primary);
+    border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--secondary);
+    border-radius: 14px;
+    border: 3px solid var(--primary);
+}
+
+body {
+    text-align: center;
+    padding: 20px;
+    border: 3px blue dashed;
+    width: 100%;
+    margin: auto;
+}
+
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Open Sans, Arial, sans-serif,
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+/*todo this is for converter component*/
+
+.converter-wrapper {
+    background-color: #3c3c3c;
+    background-image: linear-gradient(45deg, rgba(0, 0, 0, .06) 25%, transparent 0), linear-gradient(-45deg, rgba(0, 0, 0, .06) 25%, transparent 0), linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, .06) 0), linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, .06) 0);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+}
+
+/*todo choose files component*/
+
+.open-dialog {
+    background-color: var(--primary);
+    color: #fff;
+    vertical-align: top;
+    margin: 0;
+    padding: 20px 40px 20px 40px;
+    width: 350px;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 400;
+    cursor: pointer;
+    box-shadow: 2px 8px 17px 0 rgb(76 76 76 / 6%), 2px 12px 19px 0 rgb(0 0 0 / 5%), 2px 7px 9px 0 rgb(0 0 0 / 4%), 2px 6px 9px 13px rgb(252 22 0 / 2%);
+    border-radius: 4px;
+    transition: background-color .15s ease-in-out, box-shadow .2s ease-in-out;
+}
+
+.drag-n-drop {
+    font-weight: 300;
+}
+
+.inner-converter li{
+    display: inline-flex;
+    flex-wrap: wrap;
+    border: 1px solid gray;
+    width: 70px;
+    margin: 3px;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.convert{
+    display: flex;
+    align-items: center;
+    background: red;
+    color: #ffffff;
+    padding: 20px 50px 20px 50px;
+    width: 310px;
+
+}
