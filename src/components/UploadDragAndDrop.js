@@ -19,7 +19,10 @@ const UploadDragAndDrop = () => {
     const [imageUrl, setImageUrl] = useState(null);
     const [buttonName, setButtonName] = useState('Convert');
     const [link, setLink] = useState('');
-    const [transformedImage, setTransfomredImage] = useState('');
+    const [file, setFile] = useState({
+        name: '',
+        size: ''
+    });
     const [publicId, setPublicId] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -45,10 +48,17 @@ const UploadDragAndDrop = () => {
 
     useEffect(() => {
         setSelectedFile(fileSize)
+        console.log(fileName)
+        setFile({size: `${(fileSize / 1024).toFixed(2)}KB`, name: fileName});
+        console.log(file)
     }, [fileSize]);
 
     const closeConverter = () => {
         setSelectedFile('');
+        setLink('');
+        setButtonName('Convert');
+        setLoading(false);
+        setSelectedFormat('')
     }
 
     const convertMedia = async () => {
@@ -80,11 +90,23 @@ const UploadDragAndDrop = () => {
             });
     }
 
-    const downloadAndClose = (e) => {
-        // setLink('');
-        // setSelectedFile('');
+    const downloadFile = (e) => {
         e.preventDefault();
-        // return downloadImage(link)
+        const fileName = file.name;
+        fetch(e.target.getAttribute('href'))
+            .then(resp => resp.blob())
+            .then(blob => {
+                const url = e.target.getAttribute('href');
+                const link = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = link;
+                a.download = fileName.substring(0, fileName.lastIndexOf('.'))+'.'+url.substring(url.lastIndexOf('.') + 1);
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(link);
+            })
+            .catch((error) => console.log(error));
     }
 
     const downloadTheTransformedImage = async (e) => {
@@ -97,7 +119,7 @@ const UploadDragAndDrop = () => {
             const imageUrl = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = imageUrl;
-            link.download = 'image.' + response.data.type.match(/\/(.*)/)[1]
+            link.download = file.name +'.'+ response.data.type.match(/\/(.*)/)[1]
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -131,20 +153,21 @@ const UploadDragAndDrop = () => {
                         <div>{fileSize}</div>
                         {link.length === 0 ? (
                                 <button disabled={!selectedFormat && true} onClick={convertMedia}
-                                        className={'convert font-thin text-lg'}>
+                                        className={'p-5 px-12 w-80 flex flex-wrap items-center bg-primary text-white font-thin text-lg'}>
                                     <span>{buttonName}</span> {!loading ? <BsArrowRight className={'ml-auto'}/> :
                                     <BiLoaderAlt style={{marginLeft: 'auto'}} className={'animate-spin'}/>}
                                 </button>)
                             :
                             (
                                 <div>
-                                    <a target={'_blank'} href={link} onClick={downloadAndClose}
-                                       className={'convert font-thin text-lg'}>
+                                    <a href={link} onClick={downloadFile}
+                                       className={'p-5 px-12 w-80 flex flex-wrap items-center bg-primary text-white font-thin text-lg'}
+                                       download={true}>
                                         <span>{`Download in the .${selectedFormat.toUpperCase()} format`}</span>
                                     </a>
                                     <p className={'text-xs'}>or</p>
                                     <a href={'#'} onClick={downloadTheTransformedImage}
-                                       className={'convert font-thin text-lg'}>
+                                       className={'p-5 px-12 w-80 flex flex-wrap items-center bg-primary text-white font-thin text-lg'}>
                                         <span>{`Let the platform decides the best format`}</span>
                                     </a>
                                 </div>
